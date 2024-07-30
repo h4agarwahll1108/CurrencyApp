@@ -22,8 +22,7 @@ public class ExchangeRateService {
     @Autowired
     private ExchangeRateRepository exchangeRateRepository;
     
-    
-
+   //It will fetch the exchange rates.
     public List<ExchangeRate> getExchangeRates(String to) {
         if (exchangeRateRepository.count() == 0) {
         	fetchAndStoreHistoricalExchangeRates();
@@ -35,10 +34,12 @@ public class ExchangeRateService {
         return exchangeRateRepository.findFirstByTargetCurrencyOrderByDateDesc(to);
     }
 
+    //it will fetch the top 3 exchange rates 
     public List<ExchangeRate> getLatestExchangeRates(String targetCurrency) {
         return exchangeRateRepository.findTop3ByTargetCurrencyOrderByDateDesc(targetCurrency);
     }
 
+    //logic to store latest rates
     private void fetchAndStoreExchangeRates() {
         ResponseEntity<ExchangeRateResponse> response = restTemplate.getForEntity(BASE_URL + "/latest", ExchangeRateResponse.class);
         ExchangeRateResponse exchangeRateResponse = response.getBody();
@@ -53,6 +54,8 @@ public class ExchangeRateService {
             });
         }
     }
+    
+    //logic to store old rates
     private void fetchAndStoreHistoricalExchangeRates() {
         ResponseEntity<ExchangeRateResponse> response = restTemplate.getForEntity(BASE_URL + "/2024-03-18?to=USD", ExchangeRateResponse.class);
         ExchangeRateResponse exchangeRateResponse = response.getBody();

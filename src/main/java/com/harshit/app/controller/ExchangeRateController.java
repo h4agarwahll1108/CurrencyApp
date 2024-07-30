@@ -16,12 +16,20 @@ public class ExchangeRateController {
 
 	@Autowired
 	private ExchangeRateService exchangeRateService;
-
+	
+	
+	/* GET /fx: Returns fx rates from USD to EUR, GBP, JPY, CZK. Response should contain 
+	date of conversion, source currency, target currency, exchange rate. It should be possible to 
+	specify target currency.*/
+	
 	@GetMapping
 	public ResponseEntity<?> getExchangeRates(@RequestParam(required = false) String to) {
 		return ResponseEntity.ok(exchangeRateService.getExchangeRates(to));
 	}
 
+	/* GET /fx/{targetCurrency}: Returns 3 latest fx rates in form of time series from 
+USD to target currency with a step of 1 day.*/
+	
 	@GetMapping("/{targetCurrency}")
 	public ResponseEntity<?> getLatestExchangeRates(@PathVariable String targetCurrency) {
 		return ResponseEntity.ok(exchangeRateService.getLatestExchangeRates(targetCurrency));
